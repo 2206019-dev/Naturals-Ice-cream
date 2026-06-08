@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artizen — Cafe · Art · Studio | Pune</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EFE0;
+    --warm: #E8D5B0;
+    --rust: #C4522A;
+    --charcoal: #1C1C1C;
+    --olive: #6B6B3A;
+    --espresso: #2E1A0E;
+    --gold: #D4A843;
+    --blush: #E8C4A0;
+    --ink: #0F0F0F;
+    --muted: #7A6A5A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--rust);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--rust);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.25s ease;
+    opacity: 0.6;
+  }
+  .cursor.expand { transform: scale(3); opacity: 0.3; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 3rem;
+    mix-blend-mode: normal;
+    background: transparent;
+    transition: background 0.4s ease, padding 0.3s ease;
+  }
+  nav.scrolled {
+    background: rgba(28,28,28,0.96);
+    padding: 1rem 3rem;
+    backdrop-filter: blur(8px);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    color: rgba(245,239,224,0.8);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--gold);
+    transform: scaleX(0); transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    background: var(--rust);
+    color: var(--cream) !important;
+    padding: 0.5rem 1.4rem;
+    border-radius: 2px;
+  }
+  .nav-cta:hover { background: var(--gold); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--espresso);
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(196,82,42,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(212,168,67,0.15) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(245,239,224,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,239,224,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* FLOATING FOOD ITEMS */
+  .food-float {
+    position: absolute;
+    font-size: 3.5rem;
+    animation: floatAround linear infinite;
+    opacity: 0.12;
+    user-select: none;
+    pointer-events: none;
+    filter: blur(0.5px);
+  }
+  @keyframes floatAround {
+    0% { transform: translateY(0px) rotate(0deg); opacity: 0.08; }
+    25% { transform: translateY(-30px) rotate(10deg); opacity: 0.15; }
+    50% { transform: translateY(-10px) rotate(-5deg); opacity: 0.1; }
+    75% { transform: translateY(-40px) rotate(8deg); opacity: 0.14; }
+    100% { transform: translateY(0px) rotate(0deg); opacity: 0.08; }
+  }
+
+  .hero-content {
+    position: relative; z-index: 5;
+    text-align: center;
+    padding: 2rem;
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 10vw, 8rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(245,239,224,0.5);
+    margin-bottom: 3rem;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+  .hero-pills {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 3rem;
+    animation: fadeUp 1s ease 0.9s both;
+  }
+  .hero-pill {
+    border: 1px solid rgba(245,239,224,0.2);
+    color: rgba(245,239,224,0.7);
+    padding: 0.4rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero-cta-group {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 1s ease 1.1s both;
+  }
+  .btn-primary {
+    background: var(--rust);
+    color: var(--cream);
+    padding: 0.9rem 2.5rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: 1px solid var(--rust);
+    cursor: none;
+  }
+  .btn-primary:hover { background: transparent; color: var(--rust); }
+  .btn-outline {
+    background: transparent;
+    color: var(--cream);
+    padding: 0.9rem 2.5rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.3s;
+    border: 1px solid rgba(245,239,224,0.3);
+    cursor: none;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.5rem; color: rgba(245,239,224,0.4);
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    animation: bounce 2s ease infinite;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(var(--gold), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--rust);
+    padding: 0.9rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-track {
+    display: inline-flex; gap: 0;
+    animation: marquee 18s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  .marquee-item {
+    display: inline-flex; align-items: center; gap: 1rem;
+    padding: 0 2rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    font-weight: 500;
+  }
+  .marquee-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ABOUT SECTION */
+  .about {
+    padding: 8rem 3rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .about-label {
+    font-size: 0.72rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--rust);
+    margin-bottom: 1rem; font-weight: 500;
+  }
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 700; line-height: 1.15;
+    color: var(--espresso);
+    margin-bottom: 1.5rem;
+  }
+  .about-title em { color: var(--rust); font-style: italic; }
+  .about-body {
+    color: var(--muted);
+    line-height: 1.85;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  .about-stats {
+    display: flex; gap: 2.5rem; margin-top: 2rem;
+    border-top: 1px solid var(--warm);
+    padding-top: 2rem;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 700;
+    color: var(--rust);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    margin-top: 0.3rem;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-img-main {
+    width: 100%; aspect-ratio: 4/5;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+  .about-img-accent {
+    position: absolute;
+    width: 45%; aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+    bottom: -3rem; left: -3rem;
+    border: 6px solid var(--cream);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  .about-badge {
+    position: absolute;
+    top: 2rem; right: -1.5rem;
+    background: var(--rust);
+    color: var(--cream);
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 0.6rem; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    line-height: 1.4;
+    padding: 1rem;
+    animation: rotateBadge 10s linear infinite;
+  }
+  @keyframes rotateBadge {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* MENU SECTION */
+  .menu-section {
+    background: var(--espresso);
+    padding: 8rem 3rem;
+  }
+  .section-header {
+    text-align: center; margin-bottom: 4rem;
+  }
+  .section-label {
+    font-size: 0.72rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.8rem; font-weight: 500;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 700; color: var(--cream);
+    line-height: 1.15;
+  }
+  .section-title em { color: var(--gold); font-style: italic; }
+
+  /* FOOD ANIMATION SHOWCASE */
+  .food-showcase {
+    display: flex; gap: 2rem; justify-content: center;
+    flex-wrap: wrap; margin: 4rem 0;
+  }
+  .food-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    width: 200px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .food-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(212,168,67,0.1), transparent 70%);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .food-card:hover { transform: translateY(-12px) scale(1.04); border-color: rgba(212,168,67,0.3); }
+  .food-card:hover::before { opacity: 1; }
+  .food-emoji {
+    font-size: 3rem; margin-bottom: 1rem;
+    display: block;
+    animation: wobble 3s ease infinite;
+    transform-origin: center bottom;
+  }
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-3deg) scale(1); }
+    25% { transform: rotate(4deg) scale(1.1); }
+    50% { transform: rotate(-2deg) scale(1.05); }
+    75% { transform: rotate(3deg) scale(1.08); }
+  }
+  .food-card:nth-child(2) .food-emoji { animation-delay: 0.5s; }
+  .food-card:nth-child(3) .food-emoji { animation-delay: 1s; }
+  .food-card:nth-child(4) .food-emoji { animation-delay: 1.5s; }
+  .food-card:nth-child(5) .food-emoji { animation-delay: 2s; }
+  .food-card:nth-child(6) .food-emoji { animation-delay: 2.5s; }
+
+  .food-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--cream); margin-bottom: 0.3rem;
+  }
+  .food-desc { font-size: 0.75rem; color: rgba(245,239,224,0.4); line-height: 1.5; }
+  .food-price {
+    display: inline-block; margin-top: 0.8rem;
+    color: var(--gold); font-size: 0.9rem; font-weight: 600;
+  }
+
+  /* MENU TABS */
+  .menu-tabs {
+    display: flex; justify-content: center; gap: 0.5rem;
+    margin: 3rem 0 2rem; flex-wrap: wrap;
+  }
+  .menu-tab {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(245,239,224,0.6);
+    padding: 0.5rem 1.5rem;
+    border-radius: 100px;
+    font-size: 0.8rem; letter-spacing: 0.08em;
+    text-transform: uppercase; font-weight: 500;
+    cursor: none; transition: all 0.3s;
+  }
+  .menu-tab.active, .menu-tab:hover {
+    background: var(--rust); border-color: var(--rust);
+    color: var(--cream);
+  }
+  .menu-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+  }
+  .menu-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px; padding: 1.5rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+    transition: all 0.3s;
+  }
+  .menu-item:hover { background: rgba(255,255,255,0.07); transform: translateX(4px); }
+  .menu-item-emoji { font-size: 2rem; flex-shrink: 0; line-height: 1; }
+  .menu-item-info { flex: 1; }
+  .menu-item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--cream); font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+  .menu-item-desc { font-size: 0.8rem; color: rgba(245,239,224,0.45); line-height: 1.5; }
+  .menu-item-price {
+    color: var(--gold); font-weight: 600; font-size: 0.9rem;
+    margin-top: 0.4rem;
+  }
+  .menu-badge {
+    background: var(--rust); color: var(--cream);
+    font-size: 0.6rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.2rem 0.5rem;
+    border-radius: 2px; margin-left: 0.5rem; font-weight: 600;
+  }
+
+  /* ART STUDIO */
+  .studio {
+    padding: 8rem 3rem;
+    max-width: 1200px; margin: 0 auto;
+    background: var(--cream);
+  }
+  .studio-inner { max-width: 1200px; margin: 0 auto; }
+  .studio-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem; margin-top: 4rem;
+  }
+  .studio-card {
+    background: var(--warm);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 3/4;
+    cursor: none;
+    transition: all 0.4s;
+  }
+  .studio-card:nth-child(1) { grid-row: span 2; aspect-ratio: unset; }
+  .studio-card img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+  }
+  .studio-card:hover img { transform: scale(1.06); }
+  .studio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(46,26,14,0.8) 0%, transparent 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 1.5rem;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .studio-card:hover .studio-overlay { opacity: 1; }
+  .studio-card-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream); font-size: 1.1rem; font-weight: 700;
+  }
+  .studio-card-tag {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-top: 0.3rem;
+  }
+  .studio-placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; background: var(--warm);
+    min-height: 200px;
+  }
+
+  /* GALLERY */
+  .gallery-section {
+    background: var(--charcoal);
+    padding: 8rem 3rem;
+  }
+  .gallery-header {
+    text-align: center; margin-bottom: 4rem;
+  }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 1rem;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .gallery-item {
+    position: relative; overflow: hidden;
+    border-radius: 6px; cursor: none;
+    background: #2a2a2a;
+  }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item:nth-child(5) { grid-column: span 2; }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+    min-height: 180px;
+  }
+  .gallery-item:hover img { transform: scale(1.08); }
+  .gallery-item-overlay {
+    position: absolute; inset: 0;
+    background: rgba(196,82,42,0.6);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+  .gallery-zoom { font-size: 2rem; color: white; }
+
+  /* EVENTS */
+  .events {
+    padding: 8rem 3rem;
+    background: var(--cream);
+  }
+  .events-inner { max-width: 1200px; margin: 0 auto; }
+  .events-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem; margin-top: 4rem;
+  }
+  .event-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+    transition: all 0.4s;
+    cursor: none;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .event-card:hover { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+  .event-img {
+    height: 200px; width: 100%;
+    object-fit: cover; display: block;
+    background: var(--warm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+  }
+  .event-body { padding: 1.5rem; }
+  .event-tag {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--rust); font-weight: 600;
+  }
+  .event-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--espresso); margin: 0.5rem 0;
+  }
+  .event-meta {
+    font-size: 0.8rem; color: var(--muted);
+    display: flex; align-items: center; gap: 1rem;
+    margin-top: 1rem; padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .event-meta-item { display: flex; align-items: center; gap: 0.3rem; }
+
+  /* TESTIMONIALS */
+  .testimonials {
+    background: var(--espresso);
+    padding: 8rem 3rem;
+  }
+  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem; margin-top: 4rem;
+  }
+  .testi-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 2rem;
+    position: relative;
+  }
+  .testi-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; color: var(--rust);
+    line-height: 1; margin-bottom: 1rem;
+  }
+  .testi-text {
+    font-size: 0.95rem; color: rgba(245,239,224,0.7);
+    line-height: 1.8; margin-bottom: 1.5rem;
+  }
+  .testi-author {
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--rust);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 0.85rem;
+  }
+  .testi-name { font-weight: 600; color: var(--cream); font-size: 0.9rem; }
+  .testi-role { font-size: 0.75rem; color: rgba(245,239,224,0.4); }
+  .stars { color: var(--gold); font-size: 0.8rem; margin-bottom: 1rem; }
+
+  /* CONTACT / MAP */
+  .contact {
+    padding: 8rem 3rem;
+    background: var(--cream);
+  }
+  .contact-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: start;
+  }
+  .contact-info { }
+  .contact-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+  .contact-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--rust);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .contact-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .contact-val { font-size: 1rem; color: var(--espresso); font-weight: 500; margin-top: 0.2rem; }
+  .contact-form-area { }
+  .form-group { margin-bottom: 1.5rem; }
+  .form-label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; display: block; }
+  .form-input {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 1px solid var(--warm);
+    border-radius: 4px;
+    background: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; color: var(--charcoal);
+    transition: border-color 0.3s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--rust); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .btn-submit {
+    background: var(--rust);
+    color: var(--cream); border: none;
+    padding: 1rem 2.5rem; border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 500;
+    cursor: none; transition: all 0.3s; width: 100%;
+  }
+  .btn-submit:hover { background: var(--espresso); }
+
+  /* HOURS WIDGET */
+  .hours-strip {
+    background: var(--gold);
+    padding: 2rem 3rem;
+    display: flex; justify-content: center; align-items: center;
+    gap: 4rem; flex-wrap: wrap;
+  }
+  .hours-item { text-align: center; }
+  .hours-day { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--espresso); font-weight: 600; }
+  .hours-time { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--espresso); font-weight: 700; margin-top: 0.2rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 4rem 3rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand .nav-logo { font-size: 1.8rem; display: block; margin-bottom: 1rem; }
+  .footer-tagline { font-size: 0.85rem; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 250px; }
+  .footer-social { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+  .social-btn {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.5); font-size: 0.9rem;
+    transition: all 0.3s; text-decoration: none; cursor: none;
+  }
+  .social-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-heading {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4); margin-bottom: 1.2rem;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 0.7rem; }
+  .footer-links a {
+    color: rgba(255,255,255,0.55); font-size: 0.9rem;
+    text-decoration: none; transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* LIGHTBOX */
+  .lightbox {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 1000;
+    display: none; align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 90vw; max-height: 90vh;
+    object-fit: contain; border-radius: 4px;
+  }
+  .lightbox-close {
+    position: absolute; top: 2rem; right: 2rem;
+    font-size: 2rem; color: white; cursor: none;
+    background: none; border: none;
+  }
+
+  /* BURGER PIZZA SPECIAL ANIMATION */
+  .food-hero-animation {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .orbit-item {
+    position: absolute;
+    font-size: 2.5rem;
+    animation: orbit linear infinite;
+  }
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(var(--radius)) rotate(0deg); opacity: 0.12; }
+    50% { opacity: 0.18; }
+    to { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg); opacity: 0.12; }
+  }
+
+  /* PIZZA SPIN ANIMATION */
+  @keyframes pizzaSpin {
+    from { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    to { transform: rotate(360deg) scale(1); }
+  }
+  .pizza-anim { animation: pizzaSpin 8s ease-in-out infinite; display: inline-block; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+    .about-img-accent { display: none; }
+    .menu-section, .studio, .events, .contact, .gallery-section, .testimonials { padding: 5rem 1.5rem; }
+    .studio-grid { grid-template-columns: 1fr 1fr; }
+    .studio-card:nth-child(1) { grid-column: span 2; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .hours-strip { gap: 2rem; }
+    .hero-title { font-size: 3.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose">✕</button>
+  <img id="lbImg" src="" alt="">
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Arti<span>zen</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#contact" class="nav-cta">Reserve</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <!-- Floating food background -->
+  <div class="food-hero-animation" id="foodAnim"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Pune's Most Creative Space ✦</p>
+    <h1 class="hero-title">Where <em>Food</em><br>Meets Art</h1>
+    <p class="hero-sub">Cafe &nbsp;·&nbsp; Art &nbsp;·&nbsp; Studio</p>
+    <div class="hero-pills">
+      <span class="hero-pill">☕ Specialty Coffee</span>
+      <span class="hero-pill">🍕 Wood-fired Pizza</span>
+      <span class="hero-pill">🎨 Live Art Classes</span>
+      <span class="hero-pill">🍔 Gourmet Burgers</span>
+    </div>
+    <div class="hero-cta-group">
+      <a href="#menu" class="btn-primary">Explore Menu</a>
+      <a href="#studio" class="btn-outline">Art Studio →</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="reveal">
+    <p class="about-label">✦ Our Story</p>
+    <h2 class="about-title">A Canvas for <em>Every</em> Sense</h2>
+    <p class="about-body">
+      Born in the heart of Pune, Artizen is more than a café — it's a living, breathing creative space where the aroma of freshly brewed coffee mingles with the scent of oil paints. We believe every meal should be an experience, and every brush stroke should be savoured.
+    </p>
+    <p class="about-body">
+      Whether you're here to devour a wood-fired pizza, attend a watercolour masterclass, or simply find inspiration over a pour-over, Artizen is your canvas.
+    </p>
+    <div class="about-stats">
+      <div>
+        <div class="stat-num">5★</div>
+        <div class="stat-label">Google Rating</div>
+      </div>
+      <div>
+        <div class="stat-num">120+</div>
+        <div class="stat-label">Menu Items</div>
+      </div>
+      <div>
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Art Workshops</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-visual reveal">
+    <img class="about-img-main" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80" alt="Artizen Cafe interior" loading="lazy">
+    <img class="about-img-accent" src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=300&q=80" alt="Art at Artizen" loading="lazy">
+    <div class="about-badge">Est.<br>2021<br>Pune</div>
+  </div>
+</section>
+
+<!-- MENU SECTION -->
+<section class="menu-section" id="menu">
+  <div class="section-header reveal">
+    <p class="section-label">✦ What We Serve</p>
+    <h2 class="section-title">Our <em>Artful</em> Menu</h2>
+  </div>
+
+  <!-- Animated Food Showcase -->
+  <div class="food-showcase reveal">
+    <div class="food-card">
+      <span class="food-emoji">🍔</span>
+      <div class="food-name">The Artist Burger</div>
+      <div class="food-desc">Smash patty, truffle aioli, caramelised onions</div>
+      <span class="food-price">₹349</span>
+    </div>
+    <div class="food-card">
+      <span class="food-emoji">🍕</span>
+      <div class="food-name">Canvas Pizza</div>
+      <div class="food-desc">Wood-fired, fresh mozzarella, San Marzano tomatoes</div>
+      <span class="food-price">₹449</span>
+    </div>
+    <div class="food-card">
+      <span class="food-emoji">☕</span>
+      <div class="food-name">Espresso Palette</div>
+      <div class="food-desc">Single origin beans, latte art by our baristas</div>
+      <span class="food-price">₹180</span>
+    </div>
+    <div class="food-card">
+      <span class="food-emoji">🥗</span>
+      <div class="food-name">Gallery Salad</div>
+      <div class="food-desc">Quinoa, roasted peppers, feta, microgreens</div>
+      <span class="food-price">₹279</span>
+    </div>
+    <div class="food-card">
+      <span class="food-emoji">🧁</span>
+      <div class="food-name">Sculpted Cupcakes</div>
+      <div class="food-desc">Hand-painted fondant, daily rotating art themes</div>
+      <span class="food-price">₹149</span>
+    </div>
+    <div class="food-card">
+      <span class="food-emoji">🍹</span>
+      <div class="food-name">Palette Cleanser</div>
+      <div class="food-desc">House mocktails, watercolour-inspired presentations</div>
+      <span class="food-price">₹199</span>
+    </div>
+  </div>
+
+  <!-- Full Menu with Tabs -->
+  <div class="reveal">
+    <div class="menu-tabs">
+      <button class="menu-tab active" onclick="filterMenu('all',this)">All Items</button>
+      <button class="menu-tab" onclick="filterMenu('burger',this)">Burgers 🍔</button>
+      <button class="menu-tab" onclick="filterMenu('pizza',this)">Pizza 🍕</button>
+      <button class="menu-tab" onclick="filterMenu('coffee',this)">Coffee ☕</button>
+      <button class="menu-tab" onclick="filterMenu('dessert',this)">Desserts 🍰</button>
+    </div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<!-- ART STUDIO -->
+<section class="studio" id="studio">
+  <div class="studio-inner">
+    <div class="section-header reveal" style="text-align:left; margin-bottom:0;">
+      <p class="section-label" style="color:var(--rust);">✦ The Creative Space</p>
+      <h2 class="section-title" style="color:var(--espresso);">Art <em>Studio</em> &amp;<br>Workshop Space</h2>
+    </div>
+    <p style="color:var(--muted); max-width:500px; line-height:1.8; margin-top:1.5rem;" class="reveal">
+      Our studio hosts live painting sessions, pottery evenings, and weekly art workshops. Completely equipped — from canvases to kilns — all while sipping your favourite brew.
+    </p>
+
+    <div class="studio-grid reveal">
+      <div class="studio-card">
+        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&q=80" alt="Art Studio">
+        <div class="studio-overlay">
+          <div class="studio-card-title">Live Painting Sessions</div>
+          <div class="studio-card-tag">Every Saturday & Sunday</div>
+        </div>
+      </div>
+      <div class="studio-card">
+        <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&q=80" alt="Watercolour">
+        <div class="studio-overlay">
+          <div class="studio-card-title">Watercolour Basics</div>
+          <div class="studio-card-tag">Beginners Welcome</div>
+        </div>
+      </div>
+      <div class="studio-card">
+        <img src="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=400&q=80" alt="Pottery">
+        <div class="studio-overlay">
+          <div class="studio-card-title">Pottery Evenings</div>
+          <div class="studio-card-tag">Fridays 6–9 PM</div>
+        </div>
+      </div>
+      <div class="studio-card">
+        <img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&q=80" alt="Digital Art">
+        <div class="studio-overlay">
+          <div class="studio-card-title">Digital Art Lab</div>
+          <div class="studio-card-tag">iPad Workshops</div>
+        </div>
+      </div>
+      <div class="studio-card">
+        <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=400&q=80" alt="Sketch">
+        <div class="studio-overlay">
+          <div class="studio-card-title">Sketch &amp; Sip</div>
+          <div class="studio-card-tag">Thursdays</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="gallery-header reveal">
+    <p class="section-label">✦ Visual Journey</p>
+    <h2 class="section-title">Our <em>Gallery</em></h2>
+  </div>
+  <div class="gallery-grid reveal" id="galleryGrid"></div>
+</section>
+
+<!-- EVENTS -->
+<section class="events" id="events">
+  <div class="events-inner">
+    <div class="section-header reveal">
+      <p class="section-label" style="color:var(--rust);">✦ What's On</p>
+      <h2 class="section-title" style="color:var(--espresso);">Upcoming <em>Events</em></h2>
+    </div>
+    <div class="events-grid" id="eventsGrid"></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-header reveal">
+      <p class="section-label">✦ Guest Stories</p>
+      <h2 class="section-title">What Our <em>Guests</em> Say</h2>
+    </div>
+    <div class="testi-grid reveal" id="testiGrid"></div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<div class="hours-strip reveal">
+  <div class="hours-item">
+    <div class="hours-day">Mon – Fri</div>
+    <div class="hours-time">8:00 AM – 10:00 PM</div>
+  </div>
+  <div style="width:1px; height:50px; background:rgba(46,26,14,0.2);"></div>
+  <div class="hours-item">
+    <div class="hours-day">Saturday</div>
+    <div class="hours-time">9:00 AM – 11:30 PM</div>
+  </div>
+  <div style="width:1px; height:50px; background:rgba(46,26,14,0.2);"></div>
+  <div class="hours-item">
+    <div class="hours-day">Sunday</div>
+    <div class="hours-time">10:00 AM – 10:00 PM</div>
+  </div>
+  <div style="width:1px; height:50px; background:rgba(46,26,14,0.2);"></div>
+  <div class="hours-item">
+    <div class="hours-day">Location</div>
+    <div class="hours-time">FC Road, Pune</div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <p class="about-label">✦ Find Us</p>
+      <h2 class="about-title">Come, <em>Create</em><br>&amp; Eat With Us</h2>
+      <br>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label">Address</div>
+          <div class="contact-val">12, FC Road, Shivajinagar,<br>Pune — 411004, Maharashtra</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-val">+91 98765 43210</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val">hello@artizenpune.in</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📸</div>
+        <div>
+          <div class="contact-label">Instagram</div>
+          <div class="contact-val">@artizenpune</div>
+        </div>
+      </div>
+      <!-- Embedded map placeholder -->
+      <div style="margin-top:2rem; border-radius:8px; overflow:hidden; border:1px solid var(--warm);">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=500&q=70" style="width:100%; height:200px; object-fit:cover; display:block;" alt="Pune Map Area">
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="about-label">✦ Reserve Your Table</p>
+      <h2 class="about-title" style="margin-bottom:2rem;">Make a <em>Reservation</em></h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" placeholder="Arjun">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" placeholder="Sharma">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" placeholder="you@email.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="form-input" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Guests</label>
+          <select class="form-input">
+            <option>1 Person</option>
+            <option>2 People</option>
+            <option>3–4 People</option>
+            <option>5+ People</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Special Requests</label>
+        <textarea class="form-input" rows="3" placeholder="Art class booking, dietary requirements..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleReserve()">Reserve My Table ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Arti<span>zen</span></a>
+      <p class="footer-tagline">Pune's creative sanctuary where great food and art coexist beautifully.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#">in</a>
+        <a class="social-btn" href="#">fb</a>
+        <a class="social-btn" href="#">tw</a>
+        <a class="social-btn" href="#">yt</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-heading">Navigate</p>
+      <ul class="footer-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#menu">Our Menu</a></li>
+        <li><a href="#studio">Art Studio</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#events">Events</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-heading">Experience</p>
+      <ul class="footer-links">
+        <li><a href="#">Workshops</a></li>
+        <li><a href="#">Private Events</a></li>
+        <li><a href="#">Art Classes</a></li>
+        <li><a href="#">Sketch &amp; Sip</a></li>
+        <li><a href="#">Gift Cards</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-heading">Hours</p>
+      <ul class="footer-links">
+        <li><a href="#">Mon–Fri: 8am–10pm</a></li>
+        <li><a href="#">Sat: 9am–11:30pm</a></li>
+        <li><a href="#">Sun: 10am–10pm</a></li>
+        <li style="margin-top:1rem;"><a href="#" style="color:var(--gold);">+91 98765 43210</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Artizen Cafe · Art · Studio, Pune. All rights reserved.</span>
+    <span class="footer-copy">Designed with ♥ in Pune</span>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top = my - 6 + 'px';
+});
+function animRing() {
+  rx += (mx - rx - 18) * 0.12;
+  ry += (my - ry - 18) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a, button, .food-card, .studio-card, .gallery-item, .event-card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+});
+
+// NAV SCROLL
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 60);
+});
+
+// MARQUEE
+const marqueeItems = [
+  '🍔 Gourmet Burgers', '🍕 Wood-fired Pizza', '☕ Specialty Coffee', '🎨 Art Workshops',
+  '🖌️ Live Painting', '🥗 Fresh Salads', '🧁 Handcrafted Desserts', '🍹 Signature Mocktails',
+  '🎭 Creative Events', '📸 Instagram-worthy Spaces', '✨ Artizen Pune'
+];
+const mt = document.getElementById('marqueeTrack');
+[...marqueeItems, ...marqueeItems].forEach(t => {
+  const el = document.createElement('span');
+  el.className = 'marquee-item';
+  el.innerHTML = t + '<span class="marquee-dot"></span>';
+  mt.appendChild(el);
+});
+
+// FLOATING FOOD ANIMATION
+const foodAnim = document.getElementById('foodAnim');
+const floatEmojis = ['🍔','🍕','☕','🎨','🍰','🥗','🍹','🎭','🖌️','🍔','🍕','🎨'];
+floatEmojis.forEach((em, i) => {
+  const el = document.createElement('div');
+  el.className = 'food-float';
+  el.textContent = em;
+  el.style.left = Math.random() * 90 + '%';
+  el.style.top = Math.random() * 80 + 10 + '%';
+  el.style.animationDuration = (6 + Math.random() * 8) + 's';
+  el.style.animationDelay = (-Math.random() * 10) + 's';
+  el.style.fontSize = (2 + Math.random() * 2.5) + 'rem';
+  foodAnim.appendChild(el);
+});
+
+// MENU DATA
+const menuData = [
+  { cat: 'burger', em: '🍔', name: 'The Artist Burger', desc: 'Double smash, truffle aioli, pickled jalapeños', price: '₹349', badge: 'Best Seller' },
+  { cat: 'burger', em: '🍔', name: 'Mushroom Masterpiece', desc: 'Portobello, goat cheese, arugula, garlic mayo', price: '₹319' },
+  { cat: 'burger', em: '🍔', name: 'Spicy Canvas Burger', desc: 'Crispy chicken, sriracha, coleslaw, brioche', price: '₹299', badge: 'Spicy' },
+  { cat: 'pizza', em: '🍕', name: 'Margherita di Arte', desc: 'San Marzano, buffalo mozzarella, fresh basil', price: '₹399' },
+  { cat: 'pizza', em: '🍕', name: 'Truffle Prosciutto', desc: 'Black truffle cream, prosciutto, rocket, parmesan', price: '₹549', badge: 'Chef Fav' },
+  { cat: 'pizza', em: '🍕', name: 'BBQ Paneer Canvas', desc: 'Smoky BBQ sauce, cottage cheese, bell peppers', price: '₹449' },
+  { cat: 'coffee', em: '☕', name: 'Espresso Palette', desc: 'Single origin Coorg blend, latte art included', price: '₹180' },
+  { cat: 'coffee', em: '🧊', name: 'Cold Brew Reserve', desc: '24-hour cold steep, hint of cardamom', price: '₹220' },
+  { cat: 'coffee', em: '🍵', name: 'Matcha Studio', desc: 'Ceremonial grade matcha, oat milk, honey', price: '₹240' },
+  { cat: 'dessert', em: '🧁', name: 'Art Cupcakes', desc: 'Hand-painted fondant, rotating art themes daily', price: '₹149', badge: 'Daily Art' },
+  { cat: 'dessert', em: '🍰', name: 'Palette Cheesecake', desc: 'New York style, berry coulis, edible flowers', price: '₹249' },
+  { cat: 'dessert', em: '🍮', name: 'Crème Brûlée Finale', desc: 'Vanilla bean, caramelised sugar, orange zest', price: '₹219' },
+];
+
+function renderMenu(items) {
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = items.map(item => `
+    <div class="menu-item">
+      <div class="menu-item-emoji">${item.em}</div>
+      <div class="menu-item-info">
+        <div class="menu-item-name">${item.name}${item.badge ? `<span class="menu-badge">${item.badge}</span>` : ''}</div>
+        <div class="menu-item-desc">${item.desc}</div>
+        <div class="menu-item-price">${item.price}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderMenu(menuData);
+
+function filterMenu(cat, btn) {
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderMenu(cat === 'all' ? menuData : menuData.filter(d => d.cat === cat));
+}
+
+// GALLERY DATA
+const galleryImages = [
+  { src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80', alt: 'Artizen Food' },
+  { src: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80', alt: 'Pizza' },
+  { src: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&q=80', alt: 'Burger' },
+  { src: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&q=80', alt: 'Coffee' },
+  { src: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=700&q=80', alt: 'Art Studio' },
+  { src: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400&q=80', alt: 'Painting' },
+  { src: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&q=80', alt: 'Art Class' },
+  { src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', alt: 'Dessert' },
+];
+
+const galleryGrid = document.getElementById('galleryGrid');
+galleryImages.forEach(img => {
+  const div = document.createElement('div');
+  div.className = 'gallery-item';
+  div.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy"><div class="gallery-item-overlay"><span class="gallery-zoom">🔍</span></div>`;
+  div.addEventListener('click', () => openLightbox(img.src));
+  galleryGrid.appendChild(div);
+});
+
+// LIGHTBOX
+function openLightbox(src) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+document.getElementById('lbClose').addEventListener('click', () => {
+  document.getElementById('lightbox').classList.remove('open');
+});
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === e.currentTarget) document.getElementById('lightbox').classList.remove('open');
+});
+
+// EVENTS DATA
+const eventsData = [
+  { em: '🎨', tag: 'Art Workshop', title: 'Watercolour & Wine Evening', date: 'Sat, 14 Jun 2025', time: '6:00 PM – 9:00 PM', seats: '12 seats left' },
+  { em: '🍕', tag: 'Food Event', title: 'Pizza Making Masterclass', date: 'Sun, 15 Jun 2025', time: '2:00 PM – 5:00 PM', seats: '8 seats left' },
+  { em: '🖶', tag: 'Art Exhibition', title: 'Local Artists Showcase', date: 'Fri–Sun, 20–22 Jun', time: 'All Day, Free Entry', seats: 'Open to All' },
+];
+const evGrid = document.getElementById('eventsGrid');
+eventsData.forEach(ev => {
+  evGrid.innerHTML += `
+    <div class="event-card">
+      <div class="event-img">${ev.em}</div>
+      <div class="event-body">
+        <div class="event-tag">${ev.tag}</div>
+        <div class="event-title">${ev.title}</div>
+        <div class="event-meta">
+          <div class="event-meta-item">📅 ${ev.date}</div>
+          <div class="event-meta-item">🕐 ${ev.time}</div>
+        </div>
+        <div style="margin-top:0.8rem; font-size:0.8rem; color:var(--rust); font-weight:600;">${ev.seats}</div>
+      </div>
+    </div>
+  `;
+});
+
+// TESTIMONIALS
+const testiData = [
+  { text: 'The most unique café I have ever visited in Pune. The combination of incredible food and a live art atmosphere is absolutely unmatched. I come here every weekend!', name: 'Priya Deshmukh', role: 'Artist & Regular Guest', init: 'PD' },
+  { text: 'Attended the Sketch & Sip evening last week — we drew for two hours while the barista kept the coffee coming. Magical evening. The Artist Burger is life-changing too.', name: 'Rohan Kulkarni', role: 'Architect', init: 'RK' },
+  { text: 'Perfect spot for a creative date! The interiors are Instagram-worthy, the pizza is divine, and the staff are genuinely warm. Artizen just gets it right every time.', name: 'Sneha & Arjun', role: 'Pune Foodies', init: 'SA' },
+];
+const tGrid = document.getElementById('testiGrid');
+testiData.forEach(t => {
+  tGrid.innerHTML += `
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <div class="testi-text">${t.text}</div>
+      <div class="testi-author">
+        <div class="testi-avatar">${t.init}</div>
+        <div><div class="testi-name">${t.name}</div><div class="testi-role">${t.role}</div></div>
+      </div>
+    </div>
+  `;
+});
+
+// RESERVATION
+function handleReserve() {
+  alert('🎨 Your reservation request has been received!\nWe\'ll confirm via WhatsApp/email within 2 hours.\n\n— The Artizen Team');
+}
+
+// SCROLL REVEAL
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1 });
+revealEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
